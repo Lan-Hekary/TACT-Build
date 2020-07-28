@@ -1,0 +1,84 @@
+{
+    "name": "TACT",
+    "version": "0.1.1",
+    "description": "A kit if Infrared Detector and Electronic Pen that transform any monitor into an Interactive Surface.",
+    "main": "main.js",
+    "homepage": "https://www.interact-labs.com/",
+    "private": true,
+    "keywords": [
+        "TACT"
+    ],
+    "author": {
+        "name": "Ahmed El Sharnoby",
+        "email": "Lan-Hekary@Gmail.com",
+        "url": "https://www.interact-labs.com/"
+    },
+    "license": "SEE LICENSE IN LICENSE",
+    "scripts": {
+        "start": "npm run release",
+        "clean": "rm -rf .\\out\\ .\\build\\",
+        "release": "rm -rf .\\build\\ && electron-builder -p onTag --c.extraMetadata.main=./build/main/mainApp.js",
+        "test": "echo \"Passed\" && exit 0"
+    },
+    "build": {
+        "appId": "com.interact-labs.tact",
+        "productName": "TACT",
+        "remoteBuild": false,
+        "beforeBuild": "./extractBuild.js",
+        "artifactName": "${productName}-${version}-${os}.${ext}",
+        "files": [
+            "build/**/*",
+            "!node_modules"
+        ],
+        "directories": {
+            "buildResources": "assets",
+            "output": "out"
+        },
+        "publish": [
+            {
+                "provider": "github"
+            }
+        ],
+        "mac": {
+            "target": [
+                "zip",
+                "dmg",
+                "pkg"
+            ],
+            "icon": "assets/icon.icns"
+        },
+        "win": {
+            "target": [
+                "zip",
+                "portable",
+                "nsis"
+            ],
+            "icon": "assets/icon.ico"
+        },
+        "portable": {
+            "artifactName": "${productName}-Portable-${version}-${os}-${arch}.${ext}"
+        },
+        "nsis": {
+            "artifactName": "${productName}-Installer-${version}-${os}-${arch}.${ext}",
+            "oneClick": false,
+            "deleteAppDataOnUninstall": true,
+            "installerIcon": "assets/icon.ico",
+            "installerHeaderIcon": "assets/icon.ico"
+        },
+        "linux": {
+            "target": [
+                "zip",
+                "deb",
+                "AppImage"
+            ],
+            "category": "Education",
+            "executableName": "TACT"
+        }
+    },
+    "devDependencies": {
+        "electron": "^8.4.1",
+        "electron-builder": "^22.8.0",
+        "extract-zip": "^2.0.1"
+    },
+    "dependencies": {}
+}
