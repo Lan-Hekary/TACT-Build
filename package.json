@@ -2,9 +2,13 @@
     "name": "TACT",
     "version": "0.1.2",
     "description": "A kit if Infrared Detector and Electronic Pen that transform any monitor into an Interactive Surface.",
-    "main": "main.js",
+    "main": "./build/main/mainApp.js",
     "homepage": "https://www.interact-labs.com/",
     "private": true,
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Lan-Hekary/TACT-Build.git"
+    },
     "keywords": [
         "TACT"
     ],
@@ -17,7 +21,7 @@
     "scripts": {
         "start": "npm run release",
         "clean": "rm -rf .\\out\\ .\\build\\",
-        "release": "rm -rf .\\build\\ && electron-builder -p onTag --c.extraMetadata.main=./build/main/mainApp.js",
+        "release": "rm -rf .\\build\\ && electron-builder -p onTag",
         "test": "echo \"Passed\" && exit 0"
     },
     "build": {
