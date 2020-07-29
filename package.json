@@ -20,8 +20,8 @@
     "license": "SEE LICENSE IN LICENSE",
     "scripts": {
         "start": "npm run release",
-        "clean": "rm -rf .\\out\\ .\\build\\",
-        "release": "rm -rf .\\build\\ && electron-builder -p onTag",
+        "clean": "rm -rf out build",
+        "release": "rm -rf build && electron-builder -p onTag",
         "test": "echo \"Passed\" && exit 0"
     },
     "build": {
@@ -32,7 +32,28 @@
         "artifactName": "${productName}-${version}-${os}.${ext}",
         "files": [
             "build/**/*",
-            "!node_modules"
+            "!node_modules/",
+            {
+                "from": "node_modules/node-hid/build/Release",
+                "to": "build/Release",
+                "filter": [
+                    "**/*.node"
+                ]
+            },
+            {
+                "from": "node_modules/usb-detection/build/Release",
+                "to": "build/Release",
+                "filter": [
+                    "**/*.node"
+                ]
+            },
+            {
+                "from": "node_modules/@serialport/bindings/build/Release",
+                "to": "build/Release",
+                "filter": [
+                    "**/*.node"
+                ]
+            }
         ],
         "directories": {
             "buildResources": "assets",
@@ -84,5 +105,9 @@
         "electron-builder": "^22.8.0",
         "extract-zip": "^2.0.1"
     },
-    "dependencies": {}
+    "dependencies": {
+        "avrgirl-arduino": "^4.2.3",
+        "node-hid": "^1.3.0",
+        "usb-detection": "^4.10.0"
+    }
 }
