@@ -25,7 +25,7 @@
         "test": "echo \"Passed\" && exit 0"
     },
     "build": {
-        "appId": "com.interact-labs.tact",
+        "appId": "com.interact-labs.TACT",
         "productName": "TACT",
         "remoteBuild": false,
         "artifactName": "${productName}-${version}-${os}.${ext}",
@@ -69,13 +69,15 @@
                 "dmg",
                 "pkg"
             ],
-            "icon": "assets/icon.icns"
+            "icon": "assets/icon.icns",
+            "category": "public.app-category.productivity"
         },
         "win": {
             "target": [
                 "zip",
                 "portable",
-                "nsis"
+                "nsis",
+                "nsis-web"
             ],
             "icon": "assets/icon.ico"
         },
@@ -89,14 +91,27 @@
             "installerIcon": "assets/icon.ico",
             "installerHeaderIcon": "assets/icon.ico"
         },
+        "nsisWeb": {
+            "artifactName": "${productName}-Web-Installer-${version}-${os}-${arch}.${ext}",
+            "oneClick": false,
+            "deleteAppDataOnUninstall": true,
+            "installerIcon": "assets/icon.ico",
+            "installerHeaderIcon": "assets/icon.ico"
+        },
         "linux": {
             "target": [
                 "zip",
                 "deb",
                 "AppImage"
             ],
-            "category": "Education",
-            "executableName": "TACT"
+            "category": "Productivity",
+            "executableName": "TACT",
+            "synopsis": "Interactive Kit"
+        },
+        "deb": {
+            "packageCategory": "Productivity",
+            "afterInstall": "assets/postInstall.sh",
+            "afterRemove": "assets/postRemove.sh"
         }
     },
     "devDependencies": {
