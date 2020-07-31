@@ -74,10 +74,10 @@
         },
         "win": {
             "target": [
-                "zip",
-                "portable",
-                "nsis",
-                "nsis-web"
+                "portable:x64",
+                "nsis:x64",
+                "nsis-web:x64",
+                "nsis-web:ia32"
             ],
             "icon": "assets/icon.ico"
         },
