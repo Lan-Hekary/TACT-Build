@@ -28,6 +28,7 @@
         "appId": "com.interact-labs.TACT",
         "productName": "TACT",
         "remoteBuild": false,
+        "buildDependenciesFromSource": true,
         "artifactName": "${productName}-${version}-${os}.${ext}",
         "files": [
             "build/**/*",
