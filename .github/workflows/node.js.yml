@@ -30,6 +30,9 @@ jobs:
             #     echo "::set-env name=CSC_IDENTITY_AUTO_DISCOVERY::false"
             - name: Check out Git repository
               uses: actions/checkout@v1
+            - name: Install libusb
+                if: runner.os == 'Linux'
+                run: sudo apt-get install libusb-1.0-0-dev
             - name: Use Node.js ${{ matrix.node_version }}
               uses: actions/setup-node@v1
               with:
