@@ -1,95 +1,91 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
 name: Node.js CI
 
 on:
-    push:
-        tags:
-            - v* # Push events to v* tags
-    workflow_dispatch:
-        inputs:
-          name:
-            description: 'workflow'
-            required: true
-            default: 'workflow'
-
+  push:
+    tags:
+      - v* # Push events to v* tags
+  workflow_dispatch:
+    inputs:
+      upload:
+        description: Upload output artifacts
+        required: true
+        default: 'yes'
 jobs:
-    Deploy:
-        name: Deploy node ${{ matrix.node_version }} and ${{ matrix.os }}
-        runs-on: ${{ matrix.os }}
-        continue-on-error: true
-        strategy:
-            fail-fast: false
-            matrix:
-                node_version: ['12.x']
-                #         os: [ubuntu-latest]
-                os: [ubuntu-latest, windows-latest, macOS-latest]
-        env:
-            CSC_IDENTITY_AUTO_DISCOVERY: false
-        steps:
-            # - name: Setting Env & Get npm cache directory
-            #     run: |
-            #     echo "::set-env name=NPM_CACHE::$(npm config get cache)"
-            #     echo "::set-env name=ELECTRON_CACHE::$(echo $HOME/.cache/electron)"
-            #     echo "::set-env name=ELECTRON_BUILDER_CACHE::$(echo $HOME/.cache/electron-builder)"
-            #     echo "::set-env name=CSC_IDENTITY_AUTO_DISCOVERY::false"
-            - name: Check out Git repository
-              uses: actions/checkout@v1
-            - name:  Install libusb
-              run:   |
-                     if [ "$RUNNER_OS" == "Linux" ]; then
-                          sudo apt-get install libusb-1.0-0-dev
-                          sudo apt-get install libudev-dev
-                     fi
-              shell: bash
-            - name: Use Node.js ${{ matrix.node_version }}
-              uses: actions/setup-node@v1
-              with:
-                  node-version: ${{ matrix.node_version }}
-            # - uses: actions/cache@v2
-            #     name: Caching
-            #     id: cache
-            #     with:
-            #     path: |
-            #         ${{ env.NPM_CACHE }}
-            #         ${{ env.ELECTRON_CACHE }}
-            #         ${{ env.ELECTRON_BUILDER_CACHE }}
-            #     key: OS-${{ runner.os }}-node-${{ matrix.node_version }}-electron-${{ hashFiles('**/**package-lock.json') }}
-            #     restore-keys: |
-            #         OS-${{ runner.os }}-node-${{ matrix.node_version }}-electron-
-            - name: Build/release Electron app
-              uses: samuelmeuli/action-electron-builder@v1
-              with:
-                  # GitHub token, automatically provided to the action
-                  # (No need to define this secret in the repo settings)
-                  github_token: ${{ secrets.github_token }}
-
-                  # If the commit is tagged with a version (e.g. "v1.0.0"),
-                  # release the app after building
-                  release: ${{ startsWith(github.ref, 'refs/tags/v') }}
-            - name: List output
-              run: ls ./out/
-            - name: Upload Artifact
-              if: ${{ github.event.inputs.name }} == 'workflow'
-              uses: actions/upload-artifact@v2
-              with:
-                name: ${{ runner.os }}-build
-                path: |
-                    ./out/
-                    !./out/*unpacked
-#     - name: Install
-#       run: |
-#         npm install
-#     - name: Test
-#       if: steps.cache.outputs.cache-hit != 'true'
-#       run: |
-#         npm test
-#     - name: Build
-#       run: |
-#         npm run release
-#     - name: Upload Artifact
-#       uses: actions/upload-artifact@v2
-#       with:
-#         name: ${{ runner.os }}-build
-#         path: ./out/
+  Deploy:
+    name: 'Deploy node ${{ matrix.node_version }} and ${{ matrix.os }}'
+    runs-on: '${{ matrix.os }}'
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        node_version: ['12.x']
+#         os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: false
+    steps:
+#       - name: Setting Env & Get npm cache directory
+#         run: |
+#           echo "::set-env name=NPM_CACHE::$(npm config get cache)"
+#           echo "::set-env name=ELECTRON_CACHE::$(echo $HOME/.cache/electron)"
+#           echo "::set-env name=ELECTRON_BUILDER_CACHE::$(echo $HOME/.cache/electron-builder)"
+#           echo "::set-env name=CSC_IDENTITY_AUTO_DISCOVERY::false"
+      - name: Check out Git repository
+        uses: actions/checkout@v1
+      - name: Install libusb
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            sudo apt-get install libusb-1.0-0-dev
+            sudo apt-get install libudev-dev
+          fi
+        shell: bash
+      - name: 'Use Node.js ${{ matrix.node_version }}'
+        uses: actions/setup-node@v1
+        with:
+          node-version: '${{ matrix.node_version }}'
+#       - uses: actions/cache@v2
+#         name: Caching
+#         id: cache
+#         with:
+#           path: |
+#             ${{ env.NPM_CACHE }}
+#             ${{ env.ELECTRON_CACHE }}
+#             ${{ env.ELECTRON_BUILDER_CACHE }}
+#           key: >-
+#             OS-${{ runner.os }}-node-${{ matrix.node_version }}-electron-${{
+#             hashFiles('**/**package-lock.json') }}
+#           restore-keys: |
+#             OS-${{ runner.os }}-node-${{ matrix.node_version }}-electron-
+      - name: Build/release Electron app
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          github_token: '${{ secrets.github_token }}'
+          release: '${{ startsWith(github.ref, ''refs/tags/v'') }}'
+      - name: List Output
+        run: |
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            ls ./out/
+          else
+            ls -al ./out/
+          fi
+        shell: bash
+      - name: Upload Artifact
+        if: '${{ github.event.inputs.upload }} == ''yes'''
+        uses: actions/upload-artifact@v2
+        with:
+          name: '${{ runner.os }}-build'
+          if-no-files-found: ignore
+          path: |
+            ./out/
+            !./out/*unpacked
+            !./out/mac/
+#       - name: Install
+#         run: |
+#           npm install
+#       - name: Test
+#         if: steps.cache.outputs.cache-hit != 'true'
+#         run: |
+#           npm test
+#       - name: Build
+#         run: |
+#           npm run release
