@@ -7,6 +7,7 @@ on:
     push:
         tags:
             - v* # Push events to v* tags
+    workflow_dispatch:
 
 jobs:
     test:
@@ -34,6 +35,7 @@ jobs:
               run:   |
                      if [ "$RUNNER_OS" == "Linux" ]; then
                           sudo apt-get install libusb-1.0-0-dev
+                          sudo apt-get install libudev-dev
                      fi
               shell: bash
             - name: Use Node.js ${{ matrix.node_version }}
