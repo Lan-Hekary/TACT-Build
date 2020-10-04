@@ -8,9 +8,14 @@ on:
         tags:
             - v* # Push events to v* tags
     workflow_dispatch:
+        inputs:
+          name:
+            description: 'workflow'
+            required: true
+            default: 'workflow'
 
 jobs:
-    test:
+    Deploy:
         name: Deploy node ${{ matrix.node_version }} and ${{ matrix.os }}
         runs-on: ${{ matrix.os }}
         continue-on-error: true
@@ -63,6 +68,16 @@ jobs:
                   # If the commit is tagged with a version (e.g. "v1.0.0"),
                   # release the app after building
                   release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+            - name: List output
+              run: ls ./out/
+            - name: Upload Artifact
+              if: ${{ github.event.inputs.name }} == 'workflow'
+              uses: actions/upload-artifact@v2
+              with:
+                name: ${{ runner.os }}-build
+                path: |
+                    ./out/
+                    !./out/*unpacked
 #     - name: Install
 #       run: |
 #         npm install
