@@ -20,7 +20,7 @@
     "license": "SEE LICENSE IN LICENSE",
     "scripts": {
         "start": "npm run release",
-        "prerelease": "crypt-aes decrypt -k -s build.zip.caes -p $CRYPT_AES_PASSWORD",
+        "unpack": "crypt-aes decrypt -k -s build.zip.caes -p",
         "clean": "rm -rf out",
         "release": "electron-builder -p onTag",
         "test": "echo \"Passed\" && exit 0"

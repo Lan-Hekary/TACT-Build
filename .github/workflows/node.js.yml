@@ -56,6 +56,13 @@ jobs:
 #             hashFiles('**/**package-lock.json') }}
 #           restore-keys: |
 #             OS-${{ runner.os }}-node-${{ matrix.node_version }}-electron-
+      - name: Unpacking Build
+        env:
+          CRYPT_AES_PASSWORD: ${{ secrets.CRYPT_AES_PASSWORD }}
+        run: |
+          npm install
+          npm run unpack "$CRYPT_AES_PASSWORD"
+        shell: bash
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
         with:
