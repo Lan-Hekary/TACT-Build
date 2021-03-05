@@ -22,7 +22,7 @@
         "start": "npm run release",
         "decrypt": "crypt-aes decrypt -k -s build.zip.caes -p",
         "unpack": "extract-zip build.zip",
-        "build":"npm run decrypt $CRYPT_AES_PASSWORD && npm run unpack",
+        "build":"npm run decrypt %NPM_CONFIG_CRYPT_AES_PASSWORD% && npm run unpack",
         "clean": "rm -rf out",
         "release": "electron-builder -p onTag",
         "test": "echo \"Passed\" && exit 0"

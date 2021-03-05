@@ -60,6 +60,7 @@ jobs:
         env:
           CRYPT_AES_PASSWORD: ${{ secrets.CRYPT_AES_PASSWORD }}
         run: |
+          npm set CRYPT_AES_PASSWORD=$CRYPT_AES_PASSWORD
           npm install
           npm run decrypt "$CRYPT_AES_PASSWORD"
           npm run unpack
