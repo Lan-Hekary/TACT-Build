@@ -23,13 +23,8 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
     env:
       CSC_IDENTITY_AUTO_DISCOVERY: false
+      CRYPT_AES_PASSWORD: ${{ secrets.CRYPT_AES_PASSWORD }}
     steps:
-#       - name: Setting Env & Get npm cache directory
-#         run: |
-#           echo "::set-env name=NPM_CACHE::$(npm config get cache)"
-#           echo "::set-env name=ELECTRON_CACHE::$(echo $HOME/.cache/electron)"
-#           echo "::set-env name=ELECTRON_BUILDER_CACHE::$(echo $HOME/.cache/electron-builder)"
-#           echo "::set-env name=CSC_IDENTITY_AUTO_DISCOVERY::false"
       - name: Check out Git repository
         uses: actions/checkout@v1
       - name: Install libusb
@@ -43,28 +38,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '${{ matrix.node_version }}'
-#       - uses: actions/cache@v2
-#         name: Caching
-#         id: cache
-#         with:
-#           path: |
-#             ${{ env.NPM_CACHE }}
-#             ${{ env.ELECTRON_CACHE }}
-#             ${{ env.ELECTRON_BUILDER_CACHE }}
-#           key: >-
-#             OS-${{ runner.os }}-node-${{ matrix.node_version }}-electron-${{
-#             hashFiles('**/**package-lock.json') }}
-#           restore-keys: |
-#             OS-${{ runner.os }}-node-${{ matrix.node_version }}-electron-
-      - name: Unpacking Build
-        env:
-          CRYPT_AES_PASSWORD: ${{ secrets.CRYPT_AES_PASSWORD }}
-        run: |
-          npm set CRYPT_AES_PASSWORD=$CRYPT_AES_PASSWORD
-          npm install
-          npm run decrypt "$CRYPT_AES_PASSWORD"
-          npm run unpack
-        shell: bash
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
         with:
@@ -88,13 +61,3 @@ jobs:
             ./out/
             !./out/*unpacked
             !./out/mac/
-#       - name: Install
-#         run: |
-#           npm install
-#       - name: Test
-#         if: steps.cache.outputs.cache-hit != 'true'
-#         run: |
-#           npm test
-#       - name: Build
-#         run: |
-#           npm run release

@@ -20,9 +20,9 @@
     "license": "SEE LICENSE IN LICENSE",
     "scripts": {
         "start": "npm run release",
-        "decrypt": "crypt-aes decrypt -k -s build.zip.caes -p",
+        "decrypt": "cross-var crypt-aes decrypt -k -s build.zip.caes -p $CRYPT_AES_PASSWORD",
         "unpack": "extract-zip build.zip",
-        "build":"npm run decrypt %NPM_CONFIG_CRYPT_AES_PASSWORD% && npm run unpack",
+        "build": "npm run decrypt && npm run unpack",
         "clean": "rm -rf out",
         "release": "electron-builder -p onTag",
         "test": "echo \"Passed\" && exit 0"
@@ -126,6 +126,7 @@
         }
     },
     "devDependencies": {
+        "cross-var": "^1.1.0",
         "crypt-aes": "^1.1.1",
         "electron": "^12.0.0",
         "electron-builder": "^22.10.5",
