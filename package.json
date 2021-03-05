@@ -20,6 +20,7 @@
     "license": "SEE LICENSE IN LICENSE",
     "scripts": {
         "start": "npm run release",
+        "unpack": "crypt-aes decrypt -k -s build.zip.caes -p",
         "clean": "rm -rf out",
         "release": "electron-builder -p onTag",
         "test": "echo \"Passed\" && exit 0"
@@ -49,6 +50,13 @@
             },
             {
                 "from": "node_modules/@serialport/bindings/build/Release",
+                "to": "build/Release",
+                "filter": [
+                    "**/*.node"
+                ]
+            },
+            {
+                "from": "node_modules/usb/build/Release",
                 "to": "build/Release",
                 "filter": [
                     "**/*.node"
@@ -116,12 +124,15 @@
         }
     },
     "devDependencies": {
-        "electron": "^8.5.2",
-        "electron-builder": "^22.8.0"
+        "crypt-aes": "^1.1.1",
+        "electron": "^12.0.0",
+        "electron-builder": "^22.10.5",
+        "extract-zip": "^2.0.1"
     },
     "dependencies": {
-        "@serialport/bindings": "^8.0.8",
-        "node-hid": "^1.3.0",
+        "@serialport/bindings": "^9.0.7",
+        "node-hid": "^2.1.1",
+        "usb": "^1.6.5",
         "usb-detection": "^4.10.0"
     }
 }
