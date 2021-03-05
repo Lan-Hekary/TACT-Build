@@ -61,7 +61,8 @@ jobs:
           CRYPT_AES_PASSWORD: ${{ secrets.CRYPT_AES_PASSWORD }}
         run: |
           npm install
-          npm run unpack "$CRYPT_AES_PASSWORD"
+          npm run decrypt "$CRYPT_AES_PASSWORD"
+          npm run unpack
         shell: bash
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
