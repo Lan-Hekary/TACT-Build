@@ -32,9 +32,11 @@
         "productName": "TACT",
         "remoteBuild": false,
         "buildDependenciesFromSource": true,
+        "npmRebuild": false,
         "artifactName": "${productName}-${version}-${os}.${ext}",
         "files": [
             "build/**/*",
+            "assets/icon.*",
             "!node_modules/",
             {
                 "from": "node_modules/node-hid/build/Release",
@@ -59,6 +61,13 @@
             },
             {
                 "from": "node_modules/usb/build/Release",
+                "to": "build/Release",
+                "filter": [
+                    "**/*.node"
+                ]
+            },
+            {
+                "from": "node_modules/electron-active-window/build/Release",
                 "to": "build/Release",
                 "filter": [
                     "**/*.node"
@@ -135,6 +144,7 @@
     },
     "dependencies": {
         "@serialport/bindings": "^9.0.7",
+        "electron-active-window": "0.0.5",
         "node-hid": "^2.1.1",
         "usb": "^1.6.5",
         "usb-detection": "^4.10.0"
