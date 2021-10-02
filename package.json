@@ -1,6 +1,6 @@
 {
     "name": "TACT",
-    "version": "0.2.0",
+    "version": "3.0.0",
     "description": "A kit if Infrared Detector and Electronic Pen that transform any monitor into an Interactive Surface.",
     "main": "./build/main/mainApp.js",
     "homepage": "https://www.interact-labs.com/",
@@ -25,14 +25,14 @@
         "build": "npm run decrypt && npm run unpack",
         "clean": "rm -rf out build build.zip",
         "release": "electron-builder -p onTag",
+        "release:test": "electron-builder --dir",
         "test": "echo \"Passed\" && exit 0"
     },
     "build": {
         "appId": "com.interact-labs.TACT",
         "productName": "TACT",
         "remoteBuild": false,
-        "buildDependenciesFromSource": true,
-        "npmRebuild": false,
+        "npmRebuild": true,
         "artifactName": "${productName}-${version}-${os}.${ext}",
         "files": [
             "build/**/*",
@@ -54,20 +54,6 @@
             },
             {
                 "from": "node_modules/@serialport/bindings/build/Release",
-                "to": "build/Release",
-                "filter": [
-                    "**/*.node"
-                ]
-            },
-            {
-                "from": "node_modules/usb/build/Release",
-                "to": "build/Release",
-                "filter": [
-                    "**/*.node"
-                ]
-            },
-            {
-                "from": "node_modules/electron-active-window/build/Release",
                 "to": "build/Release",
                 "filter": [
                     "**/*.node"
@@ -95,7 +81,9 @@
         "win": {
             "target": [
                 "portable:x64",
+                "portable:ia32",
                 "nsis:x64",
+                "nsis:ia32",
                 "nsis-web:x64",
                 "nsis-web:ia32"
             ],
@@ -135,18 +123,16 @@
         }
     },
     "devDependencies": {
-        "@electron/remote": "^1.0.4",
         "cross-var": "^1.1.0",
         "crypt-aes": "^1.1.1",
-        "electron": "^11.3.0",
-        "electron-builder": "^22.10.5",
+        "electron": "^13.3.0",
+        "electron-builder": "^22.11.7",
         "extract-zip": "^2.0.1"
     },
     "dependencies": {
-        "@serialport/bindings": "^9.0.7",
-        "electron-active-window": "0.0.5",
+        "@serialport/bindings": "^9.2.4",
+        "ffi-napi": "^4.0.3",
         "node-hid": "^2.1.1",
-        "usb": "^1.6.5",
         "usb-detection": "^4.10.0"
     }
 }
