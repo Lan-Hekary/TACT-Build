@@ -125,7 +125,7 @@
     "devDependencies": {
         "cross-var": "^1.1.0",
         "crypt-aes": "^1.1.1",
-        "electron": "^13.3.0",
+        "electron": "^15.5.5",
         "electron-builder": "^22.11.7",
         "extract-zip": "^2.0.1"
     },
